@@ -5,8 +5,8 @@ if [ -f "toolpath" ]; then
 	PATH="$toolPath:$PATH"
 fi
 
-mcu="cortex-m3"	# "cortex-m0"
-arch="armv7-m"	# "armv6-m" for Cortex-M0/+
+mcu="cortex-m4"	# "cortex-m0"
+arch="armv7e-m"	# "armv6-m" for Cortex-M0/+
 
 sources=`ls *.c`
 
@@ -22,7 +22,7 @@ for s in $sources; do
 
 	echo "Building $s => $o"
 	arm-none-eabi-gcc -Wall -Wno-switch -nostdlib -nodefaultlibs -fno-exceptions \
-		-g -Os -mthumb -march=$arch -mcpu=$mcu -Wno-attributes \
+		-g -Os -mthumb -march=$arch -mcpu=$mcu -mfloat-abi=hard -Wno-attributes \
 		--function-sections \
 		-I . \
 		-o $o -x c -c $s
@@ -54,7 +54,7 @@ fi
 # report symbols
 arm-none-eabi-size obj/zlib.$arch.a > obj/zlib.$arch.report.txt
 arm-none-eabi-nm obj/zlib.$arch.a >> obj/zlib.$arch.report.txt
-arm-none-eabi-objdump -d obj/zlib.armv7-m.o >> obj/zlib.$arch.report.txt
+arm-none-eabi-objdump -d obj/zlib.$arch.o >> obj/zlib.$arch.report.txt
 
 echo "Build succeeded."
 
